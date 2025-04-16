@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f3f6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        .search-container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 450px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #138496;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .logout-btn a {
+            text-decoration: none;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .logout-btn a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+
+        li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h2>Search Users</h2>
+        <form action="/loginapp/search/" method="get">
+            <label for="q">Tìm kiếm người dùng:</label>
+            <input type="text" name="q" id="q">
+            <button type="submit">Tìm kiếm</button>
+        </form>
+
+        {% if results %}
+            <h2>Kết quả tìm kiếm:</h2>
+            <ul>
+            {% for result in results %}
+                <li>{{ result.username }}</li>  <!-- Truy cập bằng tên cột 'username' -->
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="logout-btn">
+            <a href="/loginapp/">← Logout về trang đăng nhập</a>
+        </div>
+    </div>
+</body>
+</html>

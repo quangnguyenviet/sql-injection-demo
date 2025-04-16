@@ -2,17 +2,104 @@
 <html>
 <head>
     <title>Login Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: red;
+            text-align: center;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label>Username:</label><input type="text" name="username"><br>
-        <label>Password:</label><input type="password" name="password"><br>
-        <button type="submit">Login</button>
-    </form>
-    <p><a href="{% url 'register' %}">Register</a></p>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label>Username:</label>
+            <input type="text" name="username">
+            
+            <label>Password:</label>
+            <input type="password" name="password">
+            
+            <button type="submit">Login</button>
+        </form>
 
-    <p>{{ message }}</p>
+        <div class="register-link">
+            <p><a href="{% url 'register' %}">Register</a></p>
+        </div>
+
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+    </div>
 </body>
 </html>
