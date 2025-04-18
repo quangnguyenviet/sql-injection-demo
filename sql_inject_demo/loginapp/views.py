@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.db import connection
+from .models import Product
+from django.db.models import Q
+
 
 def login_view(request):
     
@@ -74,6 +77,35 @@ def search(request):
 # %' UNION SELECT CONCAT_WS(', ', password, username) as username FROM loginapp_user --
 
 
+# def product_search(request):
+#     query = request.GET.get('q')
+#     results = []
+#     if query:
+#         results = Product.objects.filter(
+#             Q(name__icontains=query) | Q(description__icontains=query)
+#         )
+#     context = {'query': query, 'results': results}
+#     return render(request, 'product_search.html', context)
+
+
+def product_search(request):
+    query = request.GET.get('q')
+    results = []
+
+    if query:
+        cursor = connection.cursor()
+        # Sử dụng parameterized query để tránh SQL Injection
+        sql = """
+            SELECT * FROM loginapp_product
+            WHERE name LIKE %s OR description LIKE %s
+        """
+        like_pattern = f"%{query}%"
+        cursor.execute(sql, [like_pattern, like_pattern])
+        rows = cursor.fetchall()
+        results = [tuple_to_dict(cursor, row) for row in rows]
+
+    context = {'query': query, 'results': results}
+    return render(request, 'product_search.html', context)
 
 
 def tuple_to_dict(cursor, row):
