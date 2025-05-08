@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách sản phẩm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .product-info {
+            flex-grow: 1;
+        }
+        .search-box {
+            margin: 20px;
+            padding: 10px;
+        }
+        .search-box input {
+            padding: 8px;
+            width: 300px;
+        }
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-links {
+            margin: 20px;
+        }
+        .nav-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .price {
+            color: #e44d26;
+            font-weight: bold;
+        }
+        .stock {
+            color: #28a745;
+        }
+        .view-details {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="/products">Sản phẩm</a>
+        <a href="/orders">Đơn hàng</a>
+        <a href="/search">Tìm kiếm</a>
+        <a href="/update-password">Đổi mật khẩu</a>
+        <a href="/">Đăng xuất</a>
+        <p style="font-family: 'Segoe UI', sans-serif; font-size: 18px; color: #4CAF50; border: 2px dashed #4CAF50; padding: 12px; border-radius: 10px; text-align: center;">
+            🌟 <strong>Xin chào, {{ request.session.username }}</strong> 🌟
+        </p>        
+    </div>
+
+    <div class="search-box">
+        <form method="GET" action="/products">
+            <input type="text" name="q" value="{{ search }}" placeholder="Tìm kiếm sản phẩm...">
+            <button type="submit">Tìm kiếm</button>
+        </form>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            {% else %}
+                <img src="/static/images/no-image.png" alt="No image" class="product-image">
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+            <div class="product-info">
+                <p>{{ product.description }}</p>
+                <p class="price">Giá: {{ product.price|floatformat:0 }} VNĐ</p>
+                <p class="stock">Số lượng: {{ product.stock }}</p>
+            </div>
+            <a href="/product/{{ product.id }}/" class="view-details">Xem chi tiết</a>
+        </div>
+        {% empty %}
+        <p>Không tìm thấy sản phẩm nào.</p>
+        {% endfor %}
+    </div>
+</body>
+</html> 
