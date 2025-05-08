@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chi tiết sản phẩm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .product-detail {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .product-info {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .comments {
+            margin-top: 30px;
+        }
+        .comment {
+            border: 1px solid #eee;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .nav-links {
+            margin: 20px;
+        }
+        .nav-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .add-comment {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .add-comment textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .add-comment button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="/products">Sản phẩm</a>
+        <a href="/orders">Đơn hàng</a>
+        <a href="/search">Tìm kiếm</a>
+        <a href="/update-password">Đổi mật khẩu</a>
+        <a href="/">Đăng xuất</a>
+    </div>
+
+    <div class="product-detail">
+        <div class="product-info">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            {% else %}
+                <img src="/static/images/no-image.png" alt="No image" class="product-image">
+            {% endif %}
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>Giá: {{ product.price }} VNĐ</p>
+            <p>Số lượng: {{ product.stock }}</p>
+            <form action="/create-order/" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ request.user.id }}">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+                <button type="submit">Mua hàng</button>
+            </form>
+        </div>
+
+        <div class="comments">
+            <h3>Bình luận</h3>
+            {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.username }}</strong> - {{ comment.rating }} sao</p>
+                <p>{{ comment.content }}</p>
+                <small>{{ comment.created_at }}</small>
+            </div>
+            {% empty %}
+            <p>Chưa có bình luận nào.</p>
+            {% endfor %}
+
+            <div class="add-comment">
+                <h4>Thêm bình luận</h4>
+                <form action="/add-comment/" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="1">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <textarea name="content" rows="4" placeholder="Nhập bình luận của bạn..."></textarea>
+                    <div>
+                        <label>Đánh giá:</label>
+                        <select name="rating">
+                            <option value="5">5 sao</option>
+                            <option value="4">4 sao</option>
+                            <option value="3">3 sao</option>
+                            <option value="2">2 sao</option>
+                            <option value="1">1 sao</option>
+                        </select>
+                    </div>
+                    <button type="submit">Gửi bình luận</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

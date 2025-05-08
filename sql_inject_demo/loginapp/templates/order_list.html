@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách đơn hàng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .order-list {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .order-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .nav-links {
+            margin: 20px;
+        }
+        .nav-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .status-pending {
+            color: #f0ad4e;
+        }
+        .status-completed {
+            color: #5cb85c;
+        }
+        .status-cancelled {
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="/products">Sản phẩm</a>
+        <a href="/orders">Đơn hàng</a>
+        <a href="/search">Tìm kiếm</a>
+        <a href="/update-password">Đổi mật khẩu</a>
+        <a href="/">Đăng xuất</a>
+    </div>
+
+    <div class="order-list">
+        <h2>Danh sách đơn hàng</h2>
+        {% for order in orders %}
+        <div class="order-item">
+            <h3>Đơn hàng #{{ order.id }}</h3>
+            <p>Sản phẩm: {{ order.product_name }}</p>
+            <p>Người mua: {{ order.username }}</p>
+            <p>Số lượng: {{ order.quantity }}</p>
+            <p>Tổng tiền: {{ order.total_price }} VNĐ</p>
+            <p>Trạng thái: <span class="status-{{ order.status }}">{{ order.status }}</span></p>
+            <p>Ngày đặt: {{ order.created_at }}</p>
+        </div>
+        {% empty %}
+        <p>Chưa có đơn hàng nào.</p>
+        {% endfor %}
+    </div>
+</body>
+</html> 
